@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div align="center">
+  <h1> MiCare</h1>
+  <p><strong>Doctor Appointment Manager</strong></p>
 
-## Getting Started
+  [![Live Demo](https://img.shields.io/badge/Live_Demo-FF7E36?style=for-the-badge&logo=vercel&logoColor=white)](https://najimul.xyz)
+  [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/najimhaq/nest-home-client-side)
+  [![Next.js](https://img.shields.io/badge/Next.js-16.2.4-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+  [![React](https://img.shields.io/badge/React-19.2.4-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.2.4-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+  [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+<div/>
+---
 
-First, run the development server:
+## 📖 About The Project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**MiCare** A Doctor Appointment Booking System where users can browse available doctors from the home page, view details, and book appointments. Users can manage their bookings, reviews, and profile using secure authentication (Better Auth with JWT/session).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🛠️ Built With
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Core Technologies
 
-## Learn More
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=nextjs,react,tailwind,js,prisma,postgres" />
+</p>
 
-To learn more about Next.js, take a look at the following resources:
+| Technology                                                | Version | Purpose                            |
+| --------------------------------------------------------- | ------- | ---------------------------------- |
+| [Next.js](https://nextjs.org/)                            | 16.2.10 | React framework with SSR & routing |
+| [React](https://reactjs.org/)                             | 18.3.1  | UI library                         |
+| [Tailwind CSS](https://tailwindcss.com/)                  | 4.2.4   | Utility-first CSS framework        |
+| [daisy UI](https://daisyui.com/)                          | 5.5.19  | Utility-first CSS framework        |
+| [Prisma](https://www.prisma.io/)                          | 7.8.0   | ORM                                |
+| [PostgreSQL](https://www.postgresql.org/)                 | 7.2.0   | Database                           |
+| [BetterAuth](https://better-auth.com/)                    | 1.6.9   | Authentication solution            |
+| [Framer Motion](https://motion.dev/examples)              | 12.42.2 | Animation library                  |
+| [React Icons](https://react-icons.github.io/react-icons/) | 5.6.0   | Icon library                       |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
