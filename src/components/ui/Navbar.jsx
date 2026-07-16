@@ -1,87 +1,98 @@
 'use client';
-import { ChevronDown, HeartPulse, Plus, Menu } from 'lucide-react';
+
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { useState } from 'react';
-import ReusableButton from '../reusable/ReusableButton';
+import SmoothLink from '../lenis/SmoothLink';
+import { HeartPulse, Plus } from 'lucide-react';
 import Link from 'next/link';
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const navLinks = [
+  { name: 'Home', href: '/' },
+  { name: 'Services', href: '/services' },
+  { name: 'About us', href: '/about-us' },
+  { name: 'Doctors', href: '/doctors' },
+  { name: 'Contact', href: '/contact' },
+];
+
+export default function Navbar() {
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const previous = scrollY.getPrevious();
+
+    if (latest > previous && latest > 150) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+
+    if (latest > 50) {
+      setScrolled(true);
+    } else {
+      setScrolled(false);
+    }
+  });
 
   return (
-    <nav className='w-full bg-black shadow-md fixed top-0 left-0 z-50 mt-12'>
-      <div className='max-w-7xl mx-auto px-4 flex items-center justify-between h-16'>
-        {/* Logo */}
-        <div className='flex items-center gap-2 cursor-pointer'>
-          <div className='w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center'>
-            <HeartPulse className='w-5 h-5 text-white' aria-hidden='true' />
+    <motion.nav
+      variants={{
+        visible: { y: 0 },
+        hidden: { y: '-100%' },
+      }}
+      animate={hidden ? 'hidden' : 'visible'}
+      transition={{ duration: 0.35, ease: 'easeInOut' }}
+      className={`fixed top-0 left-0 right-0 z-9990 transition-all duration-300 ${
+        scrolled
+          ? 'bg-gray-950/80 backdrop-blur-xl border-b border-gray-800/50 shadow-lg shadow-black/20'
+          : 'bg-transparent'
+      }`}
+    >
+      <div className='max-w-7xl mx-auto px-6 py-4 flex items-center justify-between mt-12'>
+        <SmoothLink href='/'>
+          <div className='flex items-center gap-2 cursor-pointer'>
+            <div className='w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center'>
+              <HeartPulse className='w-5 h-5 text-white' aria-hidden='true' />
+            </div>
+            <span className='text-xl font-semibold text-white flex items-center'>
+              MiCare
+              <Plus
+                className='w-4 h-4 text-cyan-600 ml-1 font-bold'
+                aria-hidden='true'
+              />
+            </span>
           </div>
-          <span className='text-xl font-semibold text-white flex items-center'>
-            MiCare
-            <Plus className='w-4 h-4 text-teal-600 ml-1' aria-hidden='true' />
-          </span>
+        </SmoothLink>
+
+        <div className='hidden md:flex items-center gap-8'>
+          {navLinks.map((link) => (
+            <SmoothLink
+              key={link.name}
+              href={link.href}
+              className='text-sm text-gray-400 hover:text-cyan-400 transition-colors relative group'
+            >
+              {link.name}
+              <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-300' />
+            </SmoothLink>
+          ))}
         </div>
 
-        {/* Desktop Menu */}
-        <ul className='hidden md:flex items-center gap-6 text-white font-medium'>
-          <li className='hover:text-cyan-600 cursor-pointer'>Home</li>
-          <li className='hover:text-cyan-600 cursor-pointer'>Services</li>
-          <li className='hover:text-cyan-600 cursor-pointer'>About Us</li>
-          <li className='hover:text-cyan-600 cursor-pointer'>Doctors</li>
-          <li className='flex items-center gap-1 hover:text-cyan-600 cursor-pointer'>
-            Pages <ChevronDown className='w-4 h-4' />
-          </li>
-          <li className='hover:text-teal-600 cursor-pointer'>Contact</li>
-        </ul>
-
-        {/* CTA Button */}
-        <div className='flex justify-center gap-2'>
-          <ReusableButton>Book Appointment</ReusableButton>
-          <ReusableButton>
-            <Link href='/signin'>Login</Link>
-          </ReusableButton>
-        </div>
-
-        {/* Mobile Menu Toggle */}
-        <button
-          className='md:hidden text-gray-700'
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label='Toggle menu'
-        >
-          <Menu className='w-6 h-6' />
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className='md:hidden bg-white shadow-md px-4 py-3 space-y-2'>
-          <a href='#' className='block text-gray-700 hover:text-teal-600'>
-            Home
-          </a>
-          <a href='#' className='block text-gray-700 hover:text-teal-600'>
-            Services
-          </a>
-          <a href='#' className='block text-gray-700 hover:text-teal-600'>
-            About Us
-          </a>
-          <a href='#' className='block text-gray-700 hover:text-teal-600'>
-            Doctors
-          </a>
-          <a
-            href='#'
-            className=' text-gray-700 hover:text-teal-600 flex items-center gap-1'
+        <div className='flex items-center gap-4'>
+          <Link
+            href='/book-appointment'
+            className='px-4 py-2 text-sm rounded-md bg-linear-to-r from-cyan-500 to-teal-500 text-white font-medium shadow-sm hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105'
           >
-            Pages <ChevronDown className='w-4 h-4' />
-          </a>
-          <a href='#' className='block text-gray-700 hover:text-teal-600'>
-            Contact
-          </a>
-          <button className='w-full bg-cyan-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-teal-700 transition'>
             Book Appointment
-          </button>
+          </Link>
+          <Link
+            href='/signin'
+            className='px-4 py-2 text-sm rounded-md bg-linear-to-r from-cyan-500 to-teal-500 text-white font-medium shadow-sm hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105'
+          >
+            Signin
+          </Link>
         </div>
-      )}
-    </nav>
+      </div>
+    </motion.nav>
   );
-};
-
-export default Navbar;
+}
