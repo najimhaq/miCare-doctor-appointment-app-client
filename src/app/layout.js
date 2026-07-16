@@ -21,9 +21,10 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang='en'
+      data-theme='dark'
       data-scroll-behavior='smooth'
       suppressHydrationWarning
-      className={manrope.className}
+      className={`${manrope.className} dark`}
     >
       <body className='flex min-h-screen flex-col text-white antialiased'>
         <BlackFriday />
