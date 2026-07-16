@@ -5,6 +5,7 @@ import { Manrope } from 'next/font/google';
 import Navbar from '@/components/ui/Navbar';
 import BlackFriday from '@/components/ui/BlackFriday';
 import Footer from '@/components/ui/Footer';
+import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata = {
   title: 'Medicare - Find Your Perfect Doctor',
@@ -21,26 +22,32 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang='en'
-      data-theme='dark'
       data-scroll-behavior='smooth'
       suppressHydrationWarning
-      className={`${manrope.className} dark`}
+      className={manrope.className}
     >
-      <body className='flex min-h-screen flex-col bg-black antialiased'>
-        <BlackFriday />
-        <Navbar />
-        <main className='grow'>{children}</main>
-        <Footer />
-        <Toaster
-          position='top-right'
-          toastOptions={{
-            style: {
-              background: '#171717',
-              color: '#fff',
-              border: '1px solid rgba(255,255,255,0.1)',
-            },
-          }}
-        />
+      <body className='flex min-h-screen flex-col  antialiased'>
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          enableSystem
+          disableTransitionOnChange
+        >
+          <BlackFriday />
+          <Navbar />
+          <main className='grow'>{children}</main>
+          <Footer />
+          <Toaster
+            position='top-right'
+            toastOptions={{
+              style: {
+                background: '#171717',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.1)',
+              },
+            }}
+          />
+        </ThemeProvider>
       </body>
     </html>
   );

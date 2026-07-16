@@ -3,8 +3,9 @@
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { useState } from 'react';
 import SmoothLink from '../lenis/SmoothLink';
-import { HeartPulse, Plus } from 'lucide-react';
+import { HeartPulse, Plus, Menu, X } from 'lucide-react';
 import Link from 'next/link';
+import { ModeToggle } from '../themes/MoodToggle';
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -17,6 +18,7 @@ const navLinks = [
 export default function Navbar() {
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
@@ -43,13 +45,14 @@ export default function Navbar() {
       }}
       animate={hidden ? 'hidden' : 'visible'}
       transition={{ duration: 0.35, ease: 'easeInOut' }}
-      className={`fixed top-0 left-0 right-0 z-9990 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-gray-950/80 backdrop-blur-xl border-b border-gray-800/50 shadow-lg shadow-black/20'
           : 'bg-transparent'
       }`}
     >
-      <div className='max-w-7xl mx-auto px-6 py-4 flex items-center justify-between mt-12'>
+      <div className='max-w-7xl mx-auto px-6 py-4 flex items-center justify-between mt-20 md:mt-12'>
+        {/* Logo */}
         <SmoothLink href='/'>
           <div className='flex items-center gap-2 cursor-pointer'>
             <div className='w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center'>
@@ -65,12 +68,13 @@ export default function Navbar() {
           </div>
         </SmoothLink>
 
+        {/* Desktop Menu */}
         <div className='hidden md:flex items-center gap-8'>
           {navLinks.map((link) => (
             <SmoothLink
               key={link.name}
               href={link.href}
-              className='text-sm text-gray-400 hover:text-cyan-400 transition-colors relative group'
+              className='text-md text-gray-400 hover:text-cyan-400 transition-colors relative group'
             >
               {link.name}
               <span className='absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400 group-hover:w-full transition-all duration-300' />
@@ -78,21 +82,68 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className='flex items-center gap-4'>
+        {/* Buttons */}
+        <div className='hidden md:flex items-center gap-4'>
           <Link
             href='/book-appointment'
-            className='px-4 py-2 text-sm rounded-md bg-linear-to-r from-cyan-500 to-teal-500 text-white font-medium shadow-sm hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105'
+            className='px-4 py-2 text-sm rounded-md bg-linear-to-r from-cyan-500 to-teal-500 text-white font-medium shadow-sm sm:text-center hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105'
           >
             Book Appointment
           </Link>
           <Link
             href='/signin'
-            className='px-4 py-2 text-sm rounded-md bg-linear-to-r from-cyan-500 to-teal-500 text-white font-medium shadow-sm hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105'
+            className='px-4 py-2 text-sm rounded-md bg-linear-to-r from-cyan-500 to-teal-500 text-white font-medium shadow-sm sm:text-center hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-105'
           >
             Signin
           </Link>
+          <ModeToggle />
         </div>
+
+        {/* Mobile Hamburger */}
+        <button
+          className='md:hidden text-white'
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          {mobileOpen ? (
+            <X className='w-6 h-6' />
+          ) : (
+            <Menu className='w-6 h-6' />
+          )}
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileOpen && (
+        <div className='md:hidden bg-gray-950/90 backdrop-blur-xl border-t border-gray-800/50 px-6 py-4 space-y-4'>
+          {navLinks.map((link) => (
+            <SmoothLink
+              key={link.name}
+              href={link.href}
+              className='block text-md text-gray-300 hover:text-cyan-400 transition-colors'
+              onClick={() => setMobileOpen(false)}
+            >
+              {link.name}
+            </SmoothLink>
+          ))}
+          <div className='flex flex-col gap-2 mt-4'>
+            <Link
+              href='/book-appointment'
+              className='px-4 py-2 text-sm rounded-md bg-linear-to-r from-cyan-500 to-teal-500 text-white font-medium shadow-sm hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300'
+              onClick={() => setMobileOpen(false)}
+            >
+              Book Appointment
+            </Link>
+            <Link
+              href='/signin'
+              className='px-4 py-2 text-sm rounded-md bg-linear-to-r from-cyan-500 to-teal-500 text-white font-medium shadow-sm hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300'
+              onClick={() => setMobileOpen(false)}
+            >
+              Signin
+            </Link>
+            <ModeToggle />
+          </div>
+        </div>
+      )}
     </motion.nav>
   );
 }
