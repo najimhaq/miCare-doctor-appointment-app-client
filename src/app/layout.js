@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
       suppressHydrationWarning
       className={`${manrope.className} dark`}
     >
-      <body className='flex min-h-screen flex-col text-white antialiased'>
+      <body className='flex min-h-screen flex-col bg-black antialiased'>
         <BlackFriday />
         <Navbar />
         <main className='grow'>{children}</main>

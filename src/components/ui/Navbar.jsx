@@ -8,26 +8,26 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className='w-full bg-white shadow-md fixed top-0 left-0 z-50 mt-12'>
+    <nav className='w-full bg-black shadow-md fixed top-0 left-0 z-50 mt-12'>
       <div className='max-w-7xl mx-auto px-4 flex items-center justify-between h-16'>
         {/* Logo */}
         <div className='flex items-center gap-2 cursor-pointer'>
           <div className='w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center'>
             <HeartPulse className='w-5 h-5 text-white' aria-hidden='true' />
           </div>
-          <span className='text-xl font-semibold text-gray-800 flex items-center'>
+          <span className='text-xl font-semibold text-white flex items-center'>
             MiCare
             <Plus className='w-4 h-4 text-teal-600 ml-1' aria-hidden='true' />
           </span>
         </div>
 
         {/* Desktop Menu */}
-        <ul className='hidden md:flex items-center gap-6 text-gray-700 font-medium'>
-          <li className='hover:text-teal-600 cursor-pointer'>Home</li>
-          <li className='hover:text-teal-600 cursor-pointer'>Services</li>
-          <li className='hover:text-teal-600 cursor-pointer'>About Us</li>
-          <li className='hover:text-teal-600 cursor-pointer'>Doctors</li>
-          <li className='flex items-center gap-1 hover:text-teal-600 cursor-pointer'>
+        <ul className='hidden md:flex items-center gap-6 text-white font-medium'>
+          <li className='hover:text-cyan-600 cursor-pointer'>Home</li>
+          <li className='hover:text-cyan-600 cursor-pointer'>Services</li>
+          <li className='hover:text-cyan-600 cursor-pointer'>About Us</li>
+          <li className='hover:text-cyan-600 cursor-pointer'>Doctors</li>
+          <li className='flex items-center gap-1 hover:text-cyan-600 cursor-pointer'>
             Pages <ChevronDown className='w-4 h-4' />
           </li>
           <li className='hover:text-teal-600 cursor-pointer'>Contact</li>

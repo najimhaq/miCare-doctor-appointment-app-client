@@ -13,10 +13,10 @@ export default async function SignInPage() {
   //   redirect(getRoleDashboardPath(session.user.role));
   // }
   return (
-    <div className='min-h-screen flex items-center justify-center bg-black'>
+    <div className='min-h-screen flex items-center justify-center'>
       <div className='w-full max-w-md'>
         {/* <SignInForm /> */}
-        <h1>Sign In</h1>
+        <h1 className='text-4xl font-bold text-white'>Sign In</h1>
       </div>
     </div>
   );
