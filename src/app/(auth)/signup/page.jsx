@@ -3,7 +3,7 @@
 import { SignUpForm } from '@/components/auth/SignUpForm';
 
 export const metadata = {
-  title: 'Sign Up - MiCare',
+  title: 'Signup - MiCare',
 };
 
 export default async function SignUpPage() {
