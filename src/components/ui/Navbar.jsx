@@ -21,7 +21,7 @@ export default function Navbar() {
   const [showBanner, setShowBanner] = useState(true);
 
   useEffect(() => {
-    const isClosed = localStorage.getItem('promoBannerClosed');
+    const isClosed = sessionStorage.getItem('promoBannerClosed');
     if (isClosed === 'true') {
       setShowBanner(false);
     }
@@ -29,7 +29,7 @@ export default function Navbar() {
 
   const handleBannerClose = () => {
     setShowBanner(false);
-    localStorage.setItem('promoBannerClosed', 'true');
+    sessionStorage.setItem('promoBannerClosed', 'true');
   };
 
   const { scrollY } = useScroll();
