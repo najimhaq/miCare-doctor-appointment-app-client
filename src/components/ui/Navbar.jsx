@@ -3,8 +3,20 @@
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { useState, useEffect } from 'react';
 import SmoothLink from '../lenis/SmoothLink';
-import { HeartPulse, Plus, Menu, X, TicketPercent } from 'lucide-react';
+import {
+  HeartPulse,
+  Plus,
+  Menu,
+  X,
+  TicketPercent,
+  LogOut,
+  LayoutDashboard,
+} from 'lucide-react';
 import Link from 'next/link';
+import { getRoleDashboardPath } from '@/lib/getRoleDashboardPath';
+import { useAuth } from '@/context/AuthContext';
+import { usePathname } from 'next/navigation';
+
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -19,7 +31,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
+  const pathname = usePathname();
 
+  const { user, isAuthenticated, isLoading, logout } = useAuth();
+
+  // ✅ সব hooks প্রথমে — কোনো early return এর আগে
   useEffect(() => {
     const isClosed = sessionStorage.getItem('promoBannerClosed');
     if (isClosed === 'true') {
@@ -27,24 +43,17 @@ export default function Navbar() {
     }
   }, []);
 
-  const handleBannerClose = () => {
-    setShowBanner(false);
-    sessionStorage.setItem('promoBannerClosed', 'true');
-  };
-
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     const previous = scrollY.getPrevious();
 
-    // Scroll Down & > 150px: Hide Navbar
     if (latest > previous && latest > 150) {
       setHidden(true);
     } else {
       setHidden(false);
     }
 
-    // Add background after 50px scroll
     if (latest > 50) {
       setScrolled(true);
     } else {
@@ -52,6 +61,20 @@ export default function Navbar() {
     }
   });
 
+  const handleBannerClose = () => {
+    setShowBanner(false);
+    sessionStorage.setItem('promoBannerClosed', 'true');
+  };
+
+  const handleLogout = async () => {
+    setMobileOpen(false);
+    await logout();
+  };
+
+  
+  if (pathname.includes('dashboard')) {
+    return null;
+  }
   return (
     <motion.nav
       variants={{
@@ -85,7 +108,6 @@ export default function Navbar() {
             </span>
           </div>
 
-          {/* Close Button */}
           <button
             onClick={handleBannerClose}
             className='absolute right-4 p-1 hover:bg-teal-700 rounded-full transition-colors'
@@ -97,7 +119,6 @@ export default function Navbar() {
       )}
 
       {/* --- MAIN NAVBAR SECTION --- */}
-      {/* Note: mt-20 removed. It should be mt-0 for fixed top-0 to work properly */}
       <div className='max-w-7xl mx-auto px-6 py-4 flex items-center justify-between'>
         {/* Logo */}
         <SmoothLink href='/'>
@@ -129,20 +150,51 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Desktop Buttons */}
+        {/* Desktop Buttons — ✅ এখন session-aware */}
         <div className='hidden md:flex items-center gap-3'>
-          <Link
-            href='/signin'
-            className='px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors'
-          >
-            Sign In
-          </Link>
-          <Link
-            href='/book-appointment'
-            className='px-5 py-2.5 text-sm rounded-full bg-linear-to-r from-teal-500 to-teal-600 text-white font-semibold shadow-md shadow-teal-500/20 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 hover:scale-105 active:scale-95'
-          >
-            Book Appointment
-          </Link>
+          {isLoading ? (
+            // ✅ Session check হওয়ার সময় skeleton দেখাবে, ফ্লিকার এড়ানোর জন্য
+            <div className='w-24 h-9 bg-gray-800 rounded-full animate-pulse' />
+          ) : isAuthenticated ? (
+            <>
+              <Link
+                href={getRoleDashboardPath(user?.role)}
+                className='flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors'
+              >
+                <LayoutDashboard className='w-4 h-4' />
+                Dashboard
+              </Link>
+
+              {/* User avatar/dropdown */}
+              <div className='flex items-center gap-3 pl-3 border-l border-gray-700'>
+                <div className='w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-white text-sm font-semibold'>
+                  {user?.name?.charAt(0).toUpperCase()}
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className='flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-300 hover:text-red-400 transition-colors'
+                  aria-label='Sign out'
+                >
+                  <LogOut className='w-4 h-4' />
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                href='/signin'
+                className='px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors'
+              >
+                Sign In
+              </Link>
+              <Link
+                href='/book-appointment'
+                className='px-5 py-2.5 text-sm rounded-full bg-linear-to-r from-teal-500 to-teal-600 text-white font-semibold shadow-md shadow-teal-500/20 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 hover:scale-105 active:scale-95'
+              >
+                Book Appointment
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Hamburger */}
@@ -159,7 +211,7 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu — ✅ এখানেও session-aware */}
       {mobileOpen && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -176,21 +228,62 @@ export default function Navbar() {
               {link.name}
             </SmoothLink>
           ))}
+
           <div className='flex flex-col gap-3 mt-6 pt-6 border-t border-gray-800'>
-            <Link
-              href='/signin'
-              className='w-full text-center px-4 py-3 text-sm rounded-lg border border-gray-700 text-gray-300 font-medium hover:bg-gray-800 transition-all'
-              onClick={() => setMobileOpen(false)}
-            >
-              Sign In
-            </Link>
-            <Link
-              href='/book-appointment'
-              className='w-full text-center px-4 py-3 text-sm rounded-lg bg-linear-to-r from-teal-500 to-teal-600 text-white font-semibold shadow-lg shadow-teal-500/20 transition-all'
-              onClick={() => setMobileOpen(false)}
-            >
-              Book Appointment
-            </Link>
+            {isLoading ? (
+              <div className='w-full h-12 bg-gray-800 rounded-lg animate-pulse' />
+            ) : isAuthenticated ? (
+              <>
+                {/* ✅ User info card */}
+                <div className='flex items-center gap-3 px-4 py-3 bg-gray-900 rounded-lg'>
+                  <div className='w-10 h-10 rounded-full bg-teal-600 flex items-center justify-center text-white font-semibold'>
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                  <div className='min-w-0'>
+                    <p className='text-sm text-white font-medium truncate'>
+                      {user?.name}
+                    </p>
+                    <p className='text-xs text-gray-500 truncate'>
+                      {user?.email}
+                    </p>
+                  </div>
+                </div>
+
+                <Link
+                  href={getRoleDashboardPath(user?.role)}
+                  className='w-full flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-lg border border-gray-700 text-gray-300 font-medium hover:bg-gray-800 transition-all'
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <LayoutDashboard className='w-4 h-4' />
+                  Dashboard
+                </Link>
+
+                <button
+                  onClick={handleLogout}
+                  className='w-full flex items-center justify-center gap-2 px-4 py-3 text-sm rounded-lg bg-red-500/10 text-red-400 font-medium hover:bg-red-500/20 transition-all'
+                >
+                  <LogOut className='w-4 h-4' />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href='/signin'
+                  className='w-full text-center px-4 py-3 text-sm rounded-lg border border-gray-700 text-gray-300 font-medium hover:bg-gray-800 transition-all'
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href='/book-appointment'
+                  className='w-full text-center px-4 py-3 text-sm rounded-lg bg-linear-to-r from-teal-500 to-teal-600 text-white font-semibold shadow-lg shadow-teal-500/20 transition-all'
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Book Appointment
+                </Link>
+              </>
+            )}
           </div>
         </motion.div>
       )}

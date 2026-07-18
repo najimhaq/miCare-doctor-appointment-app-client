@@ -8,6 +8,7 @@ import SmoothScrollProvider from '@/components/lenis/SmoothScroll';
 import ScrollReset from '@/components/lenis/ScrollReset';
 import ScrollProgress from '@/components/lenis/ScrollProgress';
 import BackToTop from '@/components/lenis/BackToTop';
+import { AuthProvider } from '@/context/AuthContext';
 
 export const metadata = {
   title: 'Medicare - Find Your Perfect Doctor',
@@ -29,27 +30,29 @@ export default function RootLayout({ children }) {
       className={manrope.className}
     >
       <body className='flex min-h-screen flex-col  antialiased'>
-        <SmoothScrollProvider>
-          <ScrollReset />
+        <AuthProvider>
+          <SmoothScrollProvider>
+            <ScrollReset />
 
-          <Navbar />
-          <ScrollProgress />
-          <main className='grow'>
-            <div className='mx-auto max-w-full'>{children}</div>
-          </main>
-          <BackToTop />
-          <Footer />
-          <Toaster
-            position='top-right'
-            toastOptions={{
-              style: {
-                background: '#171717',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.1)',
-              },
-            }}
-          />
-        </SmoothScrollProvider>
+            <Navbar />
+            <ScrollProgress />
+            <main className='grow'>
+              <div className='mx-auto max-w-full'>{children}</div>
+            </main>
+            <BackToTop />
+            <Footer />
+            <Toaster
+              position='top-right'
+              toastOptions={{
+                style: {
+                  background: '#171717',
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                },
+              }}
+            />
+          </SmoothScrollProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -9,8 +9,10 @@ import { ClipLoader } from 'react-spinners';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { signinSchema } from '@/app/schemas/signUpSchema';
-import { authClient } from '@/app/lib/auth-client'; 
-import { useAuth } from '@/hooks/useAuth';
+import { authClient } from '@/app/lib/auth-client';
+import { useAuth } from '@/context/AuthContext';
+
+
 
 export default function SignInForm() {
   const router = useRouter();

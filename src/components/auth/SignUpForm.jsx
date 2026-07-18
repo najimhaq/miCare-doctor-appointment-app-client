@@ -19,9 +19,9 @@ import {
   FiLock,
 } from 'react-icons/fi';
 import { signUpSchema } from '@/app/schemas/signUpSchema';
-import { useAuth } from '@/hooks/useAuth';
 import { authClient } from '@/app/lib/auth-client';
 import { uploadImage } from '@/lib/uploadImage';
+import { useAuth } from '@/context/AuthContext';
 
 export function SignUpForm() {
   const router = useRouter();
