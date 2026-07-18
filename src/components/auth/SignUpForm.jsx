@@ -67,7 +67,7 @@ export function SignUpForm() {
   };
 
   const onSubmit = async (data) => {
-    console.log('onSubmit', data);
+    // console.log('onSubmit', data);
     setIsLoading(true);
     try {
       let imageUrl = undefined;

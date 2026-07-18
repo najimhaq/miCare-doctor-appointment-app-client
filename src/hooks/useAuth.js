@@ -1,11 +1,9 @@
-//navbar a lagbe - kimi
 // hooks/useAuth.js
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { authClient } from '@/app/lib/auth-client';
-
 
 export function useAuth() {
   const [user, setUser] = useState(null);
@@ -13,31 +11,48 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const { data } = await authClient.getSession();
-        if (data?.user) {
-          setUser(data.user);
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        console.error('Auth check failed:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  // ✅ session check করার logic আলাদা function-এ রাখা হলো
+  const refreshSession = useCallback(async () => {
+    try {
+      const { data, error } = await authClient.getSession();
 
-    checkSession();
+      if (error || !data?.user) {
+        setUser(null);
+        setIsAuthenticated(false);
+        return;
+      }
+
+      setUser(data.user);
+      setIsAuthenticated(true);
+    } catch (err) {
+      console.error(
+        'Backend unreachable — is the server running?',
+        err.message
+      );
+      setUser(null);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
+  useEffect(() => {
+    refreshSession();
+  }, [refreshSession]);
+
   const logout = async () => {
-    await authClient.signOut();
-    setUser(null);
-    setIsAuthenticated(false);
-    router.push('/');
-    router.refresh();
+    try {
+      await authClient.signOut();
+    } catch (err) {
+      console.error('Logout failed:', err.message);
+    } finally {
+      setUser(null);
+      setIsAuthenticated(false);
+      router.push('/');
+      router.refresh();
+    }
   };
 
-  return { user, isAuthenticated, isLoading, logout };
+  // ✅ refreshSession এখন return object-এ আছে
+  return { user, isAuthenticated, isLoading, logout, refreshSession };
 }

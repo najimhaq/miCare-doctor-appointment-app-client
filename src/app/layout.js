@@ -4,7 +4,6 @@ import '../../styles/globals.css';
 import { Manrope } from 'next/font/google';
 import Navbar from '@/components/ui/Navbar';
 import Footer from '@/components/ui/Footer';
-import { ThemeProvider } from '@/components/theme-provider';
 import SmoothScrollProvider from '@/components/lenis/SmoothScroll';
 import ScrollReset from '@/components/lenis/ScrollReset';
 import ScrollProgress from '@/components/lenis/ScrollProgress';
@@ -32,30 +31,24 @@ export default function RootLayout({ children }) {
       <body className='flex min-h-screen flex-col  antialiased'>
         <SmoothScrollProvider>
           <ScrollReset />
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navbar />
-            <ScrollProgress />
-            <main className='grow'>
-              <div className='mx-auto max-w-full'>{children}</div>
-            </main>
-            <BackToTop />
-            <Footer />
-            <Toaster
-              position='top-right'
-              toastOptions={{
-                style: {
-                  background: '#171717',
-                  color: '#fff',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                },
-              }}
-            />
-          </ThemeProvider>
+
+          <Navbar />
+          <ScrollProgress />
+          <main className='grow'>
+            <div className='mx-auto max-w-full'>{children}</div>
+          </main>
+          <BackToTop />
+          <Footer />
+          <Toaster
+            position='top-right'
+            toastOptions={{
+              style: {
+                background: '#171717',
+                color: '#fff',
+                border: '1px solid rgba(255,255,255,0.1)',
+              },
+            }}
+          />
         </SmoothScrollProvider>
       </body>
     </html>
