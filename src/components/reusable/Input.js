@@ -1,8 +1,9 @@
 // components/ui/Input.js
 'use client';
 
+import { cn } from '@/lib/utils';
 import { forwardRef } from 'react';
-import { cn } from '@/utils/cn';
+
 
 export const Input = forwardRef(
   ({ className, error, label, ...props }, ref) => {

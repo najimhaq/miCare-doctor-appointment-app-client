@@ -18,8 +18,6 @@ export default function Navbar() {
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Banner visibility state (সাইট রিলোড দিলেও মনে রাখবে user বন্ধ করেছিল কিনা)
   const [showBanner, setShowBanner] = useState(true);
 
   useEffect(() => {
@@ -141,7 +139,7 @@ export default function Navbar() {
           </Link>
           <Link
             href='/book-appointment'
-            className='px-5 py-2.5 text-sm rounded-full bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold shadow-md shadow-teal-500/20 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 hover:scale-105 active:scale-95'
+            className='px-5 py-2.5 text-sm rounded-full bg-linear-to-r from-teal-500 to-teal-600 text-white font-semibold shadow-md shadow-teal-500/20 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 hover:scale-105 active:scale-95'
           >
             Book Appointment
           </Link>
@@ -188,7 +186,7 @@ export default function Navbar() {
             </Link>
             <Link
               href='/book-appointment'
-              className='w-full text-center px-4 py-3 text-sm rounded-lg bg-gradient-to-r from-teal-500 to-teal-600 text-white font-semibold shadow-lg shadow-teal-500/20 transition-all'
+              className='w-full text-center px-4 py-3 text-sm rounded-lg bg-linear-to-r from-teal-500 to-teal-600 text-white font-semibold shadow-lg shadow-teal-500/20 transition-all'
               onClick={() => setMobileOpen(false)}
             >
               Book Appointment

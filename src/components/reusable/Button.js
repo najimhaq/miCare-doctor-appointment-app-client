@@ -1,9 +1,7 @@
 // components/ui/Button.js
 'use client';
 
-import { cn } from "@/utils/cn";
-
-
+import { cn } from '@/lib/utils';
 
 export function Button({
   children,
