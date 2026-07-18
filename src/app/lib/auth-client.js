@@ -1,4 +1,4 @@
-// lib/auth-client.js
+// src/app/lib/auth-client.js
 import { createAuthClient } from 'better-auth/react';
 
 export const authClient = createAuthClient({

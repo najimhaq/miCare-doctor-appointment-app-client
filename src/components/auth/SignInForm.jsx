@@ -9,14 +9,13 @@ import { ClipLoader } from 'react-spinners';
 import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { signinSchema } from '@/app/schemas/signUpSchema';
-import { authClient } from '@/app/lib/auth-client';
+
 import { useAuth } from '@/context/AuthContext';
-
-
+import { authClient } from '@/app/lib/auth-client';
 
 export default function SignInForm() {
   const router = useRouter();
-  const { refreshSession } = useAuth(); // ✅ যুক্ত করুন
+  const { refreshSession } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,7 +34,6 @@ export default function SignInForm() {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      // ✅ আসল Better Auth call
       const { data: sessionData, error } = await authClient.signIn.email({
         email: data.email.trim(),
         password: data.password.trim(),
@@ -47,9 +45,11 @@ export default function SignInForm() {
       }
 
       toast.success('Welcome back! Redirecting...');
-      await refreshSession();
 
-      const role = sessionData?.user?.role;
+      // ✅ refreshSession() থেকে সরাসরি updated user নেওয়া হচ্ছে
+      const freshUser = await refreshSession();
+      const role = freshUser?.role || sessionData?.user?.role;
+
       if (role === 'PATIENT') {
         router.push('/patient/dashboard');
       } else if (role === 'DOCTOR') {
@@ -59,6 +59,8 @@ export default function SignInForm() {
       } else {
         router.push('/');
       }
+
+      router.refresh(); // ✅ নতুন cookie নিয়ে server component/middleware রিফ্রেশ
     } catch (err) {
       console.error('Sign in failed:', err.message);
       toast.error('Something went wrong. Please try again.');
@@ -178,7 +180,7 @@ export default function SignInForm() {
           <div className='mt-6 grid grid-cols-1 gap-3'>
             <button
               type='button'
-              onClick={handleGoogleSignIn} // ✅ যুক্ত করুন
+              onClick={handleGoogleSignIn}
               className='w-full flex items-center justify-center gap-3 py-3 px-4 bg-gray-950 border border-gray-800 rounded-lg text-gray-300 font-medium hover:bg-gray-800 transition-all'
             >
               <svg className='w-5 h-5' viewBox='0 0 24 24'>

@@ -17,7 +17,6 @@ import { getRoleDashboardPath } from '@/lib/getRoleDashboardPath';
 import { useAuth } from '@/context/AuthContext';
 import { usePathname } from 'next/navigation';
 
-
 const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'Services', href: '/services' },
@@ -34,14 +33,21 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const { user, isAuthenticated, isLoading, logout } = useAuth();
+  // console.log('Navbar ', user);
 
-  // ✅ সব hooks প্রথমে — কোনো early return এর আগে
+
+
   useEffect(() => {
     const isClosed = sessionStorage.getItem('promoBannerClosed');
     if (isClosed === 'true') {
       setShowBanner(false);
     }
   }, []);
+
+  const handleBannerClose = () => {
+    setShowBanner(false);
+    sessionStorage.setItem('promoBannerClosed', 'true');
+  };
 
   const { scrollY } = useScroll();
 
@@ -61,20 +67,16 @@ export default function Navbar() {
     }
   });
 
-  const handleBannerClose = () => {
-    setShowBanner(false);
-    sessionStorage.setItem('promoBannerClosed', 'true');
-  };
-
   const handleLogout = async () => {
     setMobileOpen(false);
     await logout();
   };
 
-  
+   // ✅ এখন early return — সব hooks কল হয়ে যাওয়ার পরে
   if (pathname.includes('dashboard')) {
     return null;
   }
+
   return (
     <motion.nav
       variants={{
