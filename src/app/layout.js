@@ -3,7 +3,6 @@ import { Toaster } from 'react-hot-toast';
 import '../../styles/globals.css';
 import { Manrope } from 'next/font/google';
 import Navbar from '@/components/ui/Navbar';
-import BlackFriday from '@/components/ui/BlackFriday';
 import Footer from '@/components/ui/Footer';
 import { ThemeProvider } from '@/components/theme-provider';
 import SmoothScrollProvider from '@/components/lenis/SmoothScroll';
@@ -39,7 +38,6 @@ export default function RootLayout({ children }) {
             enableSystem
             disableTransitionOnChange
           >
-            <BlackFriday />
             <Navbar />
             <ScrollProgress />
             <main className='grow'>
