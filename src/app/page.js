@@ -99,11 +99,11 @@ export default function Home() {
   return (
     <>
       {/* Hero Section */}
-      <Section showTopDivider={false}>
+      <Section showTopDivider={false} showBadge={false}>
         {/* Background Grid */}
-        <div className='absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:64px_64px]' />
+        <div className='absolute inset-0 bg-[linear-linear(rgba(255,255,255,0.02)_1px,transparent_1px),linear-linear(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size:64px_64px' />
 
-        {/* Gradient Orbs */}
+        {/* linear Orbs */}
         <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-[128px] animate-pulse' />
         <div className='absolute bottom-1/4 right-1/4 w-96 h-96 bg-teal-500/20 rounded-full blur-[128px] animate-pulse' />
         <div className='absolute top-1/2 left-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-[128px]' />
@@ -129,11 +129,11 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className='text-4xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 leading-tight'
           >
-            <span className='bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent'>
+            <span className='bg-linear-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent'>
               Your Health,
             </span>
             <br />
-            <span className='bg-gradient-to-r from-cyan-400 via-teal-400 to-blue-500 bg-clip-text text-transparent'>
+            <span className='bg-linear-to-r from-cyan-400 via-teal-400 to-blue-500 bg-clip-text text-transparent'>
               Our Priority
             </span>
           </motion.h1>
@@ -159,7 +159,7 @@ export default function Home() {
           >
             <a
               href='#features'
-              className='group px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-semibold hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 flex items-center gap-2'
+              className='group px-8 py-4 rounded-full bg-linear-to-r from-cyan-500 to-teal-500 text-white font-semibold hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 flex items-center gap-2'
             >
               Book Appointment
               <FaArrowRight className='group-hover:translate-x-1 transition-transform' />
@@ -282,7 +282,7 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className='text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-cyan-400 to-teal-500 bg-clip-text text-transparent'
+            className='text-4xl md:text-6xl font-bold mb-6 bg-linear-to-r from-cyan-400 to-teal-500 bg-clip-text text-transparent'
           >
             Ready to Get Started?
           </motion.h2>
@@ -304,7 +304,7 @@ export default function Home() {
           >
             <a
               href='/signup'
-              className='inline-flex items-center gap-2 px-10 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-teal-500 text-white font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300'
+              className='inline-flex items-center gap-2 px-10 py-4 rounded-full bg-linear-to-r from-cyan-500 to-teal-500 text-white font-semibold text-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300'
             >
               Sign Up Now
               <FaArrowRight />
