@@ -6,6 +6,10 @@ import Navbar from '@/components/ui/Navbar';
 import BlackFriday from '@/components/ui/BlackFriday';
 import Footer from '@/components/ui/Footer';
 import { ThemeProvider } from '@/components/theme-provider';
+import SmoothScrollProvider from '@/components/lenis/SmoothScroll';
+import ScrollReset from '@/components/lenis/ScrollReset';
+import ScrollProgress from '@/components/lenis/ScrollProgress';
+import BackToTop from '@/components/lenis/BackToTop';
 
 export const metadata = {
   title: 'Medicare - Find Your Perfect Doctor',
@@ -27,27 +31,34 @@ export default function RootLayout({ children }) {
       className={manrope.className}
     >
       <body className='flex min-h-screen flex-col  antialiased'>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
-          <BlackFriday />
-          <Navbar />
-          <main className='grow'>{children}</main>
-          <Footer />
-          <Toaster
-            position='top-right'
-            toastOptions={{
-              style: {
-                background: '#171717',
-                color: '#fff',
-                border: '1px solid rgba(255,255,255,0.1)',
-              },
-            }}
-          />
-        </ThemeProvider>
+        <SmoothScrollProvider>
+          <ScrollReset />
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <BlackFriday />
+            <Navbar />
+            <ScrollProgress />
+            <main className='grow'>
+              <div className='mx-auto max-w-full'>{children}</div>
+            </main>
+            <BackToTop />
+            <Footer />
+            <Toaster
+              position='top-right'
+              toastOptions={{
+                style: {
+                  background: '#171717',
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                },
+              }}
+            />
+          </ThemeProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

@@ -3,8 +3,10 @@
 
 import { ReactLenis } from 'lenis/react';
 import { useEffect, useRef } from 'react';
-import { gsap, ScrollTrigger } from '@/lib/gsap-config';
-import { lenisOptions } from '@/lib/lenis-config';
+
+
+import { gsap, ScrollTrigger } from '@/lib/config/gsap-config';
+import { lenisOptions } from '@/lib/config/lenis-config';
 
 export default function SmoothScrollProvider({ children }) {
   const lenisRef = useRef();

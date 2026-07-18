@@ -49,7 +49,7 @@ export default function BackToTop() {
           whileHover={{ scale: 1.1, rotate: 5 }}
           whileTap={{ scale: 0.9 }}
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-          className='fixed bottom-8 right-8 z-[9998] group'
+          className='fixed bottom-8 right-8 z-9998 group'
           aria-label='Back to top'
         >
           <div className='relative w-14 h-14'>

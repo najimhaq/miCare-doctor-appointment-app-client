@@ -10,6 +10,7 @@ export default function Section({
   bgColor,
   children,
   fullHeight = false,
+  showTopDivider = true, // New prop
 }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
@@ -21,7 +22,10 @@ export default function Section({
         fullHeight ? 'min-h-screen' : 'py-24 md:py-32'
       }`}
     >
-      <div className='absolute left-1/2 top-0 w-px h-32 bg-linear-to-b from-transparent via-gray-700 to-transparent' />
+      {/* Conditional Top Divider */}
+      {showTopDivider && (
+        <div className='absolute left-1/2 top-0 w-px h-32 bg-linear-to-b from-transparent via-gray-700 to-transparent' />
+      )}
 
       <div ref={ref} className='max-w-4xl mx-auto px-6 text-center'>
         <motion.span
