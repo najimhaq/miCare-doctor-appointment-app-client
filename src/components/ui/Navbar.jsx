@@ -13,9 +13,11 @@ import {
   LayoutDashboard,
 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { getRoleDashboardPath } from '@/lib/getRoleDashboardPath';
 import { useAuth } from '@/context/AuthContext';
 import { usePathname } from 'next/navigation';
+
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -31,7 +33,6 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showBanner, setShowBanner] = useState(true);
   const pathname = usePathname();
-
   const { user, isAuthenticated, isLoading, logout } = useAuth();
 
   useEffect(() => {
@@ -69,7 +70,16 @@ export default function Navbar() {
     await logout();
   };
 
-  if (pathname.includes('dashboard')) {
+  // ✅ Public paths where navbar should be visible
+  const publicPaths = ['/', '/services', '/about', '/doctors', '/contact'];
+
+  // ✅ Check if current path is a public path
+  const isPublicPath = publicPaths.some(
+    (path) => pathname === path || pathname?.startsWith(path + '/')
+  );
+
+
+  if (!isPublicPath) {
     return null;
   }
 
@@ -168,9 +178,20 @@ export default function Navbar() {
 
               {/* User avatar/dropdown */}
               <div className='flex shrink-0 items-center gap-2 border-l border-gray-700 pl-3'>
-                <div className='flex h-8 w-8 items-center justify-center rounded-full bg-teal-600 text-sm font-semibold text-white'>
-                  {user?.name?.charAt(0).toUpperCase()}
-                </div>
+                {user?.image ? (
+                  <Image
+                    src={user?.image}
+                    alt={user?.name}
+                    width={32}
+                    height={32}
+                    className='h-8 w-8 rounded-full object-cover'
+                  />
+                ) : (
+                  <div className='flex h-8 w-8 items-center justify-center rounded-full bg-teal-600 text-sm font-semibold text-white'>
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                )}
+
                 <button
                   onClick={handleLogout}
                   className='flex h-10 w-10 items-center justify-center rounded-full text-gray-300 transition-colors hover:bg-red-500/10 hover:text-red-400'
