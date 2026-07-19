@@ -126,14 +126,14 @@ export default function HeroSlider() {
       {/* Custom Navigation Arrows */}
       <button
         onClick={() => swiperRef.current?.slidePrev()}
-        className='absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all duration-300'
+        className='absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-teal-500/10 backdrop-blur-md border border-white/20 text-white hover:bg-teal-500/20 transition-all duration-300'
         aria-label='Previous slide'
       >
         <ChevronLeft className='w-5 h-5' />
       </button>
       <button
         onClick={() => swiperRef.current?.slideNext()}
-        className='absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 transition-all duration-300'
+        className='absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 w-11 h-11 flex items-center justify-center rounded-full bg-teal-500/10 backdrop-blur-md border border-white/20 text-white hover:bg-teal-500/20 transition-all duration-300'
         aria-label='Next slide'
       >
         <ChevronRight className='w-5 h-5' />

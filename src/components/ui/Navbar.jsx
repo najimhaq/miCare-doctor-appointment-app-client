@@ -33,7 +33,6 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const { user, isAuthenticated, isLoading, logout } = useAuth();
-  // console.log('Navbar ', user);
 
   useEffect(() => {
     const isClosed = sessionStorage.getItem('promoBannerClosed');
@@ -118,14 +117,14 @@ export default function Navbar() {
       )}
 
       {/* --- MAIN NAVBAR SECTION --- */}
-      <div className='max-w-7xl mx-auto px-6 py-4 flex items-center justify-between'>
+      <div className='max-w-7xl mx-auto flex items-center justify-between gap-4 px-4 py-4 sm:px-6'>
         {/* Logo */}
         <SmoothLink href='/'>
-          <div className='flex items-center gap-2 cursor-pointer group'>
+          <div className='flex items-center gap-2 cursor-pointer group shrink-0'>
             <div className='w-9 h-9 bg-teal-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300'>
               <HeartPulse className='w-5 h-5 text-white' aria-hidden='true' />
             </div>
-            <span className='text-xl font-bold text-white flex items-center tracking-tight'>
+            <span className='text-xl font-bold text-white flex items-center tracking-tight whitespace-nowrap'>
               MiCare
               <Plus
                 className='w-4 h-4 text-teal-500 ml-0.5 font-bold'
@@ -136,12 +135,12 @@ export default function Navbar() {
         </SmoothLink>
 
         {/* Desktop Menu */}
-        <div className='hidden md:flex items-center gap-8'>
+        <div className='hidden lg:flex items-center gap-6 xl:gap-8'>
           {navLinks.map((link) => (
             <SmoothLink
               key={link.name}
               href={link.href}
-              className='text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors relative group py-1'
+              className='text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors relative group py-1 whitespace-nowrap'
             >
               {link.name}
               <span className='absolute -bottom-0 left-0 w-0 h-0.5 bg-teal-400 group-hover:w-full transition-all duration-300' />
@@ -149,30 +148,30 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Desktop Buttons — ✅ এখন session-aware */}
-        <div className='hidden md:flex items-center gap-3'>
+        {/* Desktop Buttons — ✅ session-aware, fixed spacing */}
+        <div className='hidden lg:flex items-center gap-2 shrink-0'>
           {isLoading ? (
-            // ✅ Session check হওয়ার সময় skeleton দেখাবে, ফ্লিকার এড়ানোর জন্য
-            <div className='w-24 h-9 bg-gray-800 rounded-full animate-pulse' />
+            <div className='w-28 h-10 bg-gray-800 rounded-full animate-pulse' />
           ) : isAuthenticated ? (
             <>
               <Link
                 href={getRoleDashboardPath(user?.role)}
-                className='flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-300 hover:text-teal-400 transition-colors'
+                className='flex shrink-0 items-center gap-2 whitespace-nowrap px-3 py-2 text-sm font-medium text-gray-300 transition-colors hover:text-teal-400'
               >
                 <LayoutDashboard className='w-4 h-4' />
                 Dashboard
               </Link>
 
               {/* User avatar/dropdown */}
-              <div className='flex items-center gap-3 pl-3 border-l border-gray-700'>
-                <div className='w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center text-white text-sm font-semibold'>
+              <div className='flex shrink-0 items-center gap-2 border-l border-gray-700 pl-3'>
+                <div className='flex h-8 w-8 items-center justify-center rounded-full bg-teal-600 text-sm font-semibold text-white'>
                   {user?.name?.charAt(0).toUpperCase()}
                 </div>
                 <button
                   onClick={handleLogout}
-                  className='flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-300 hover:text-red-400 transition-colors'
+                  className='flex h-10 w-10 items-center justify-center rounded-full text-gray-300 transition-colors hover:bg-red-500/10 hover:text-red-400'
                   aria-label='Sign out'
+                  title='Sign out'
                 >
                   <LogOut className='w-4 h-4' />
                 </button>
@@ -182,13 +181,13 @@ export default function Navbar() {
             <>
               <Link
                 href='/signin'
-                className='px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors'
+                className='shrink-0 whitespace-nowrap rounded-full border border-teal-500 px-4 py-2.5 text-sm font-medium text-gray-200 shadow-md shadow-teal-500/10 transition-all hover:border-teal-400 hover:bg-teal-500/10 hover:text-teal-300'
               >
                 Sign In
               </Link>
               <Link
                 href='/book-appointment'
-                className='px-5 py-2.5 text-sm rounded-full bg-linear-to-r from-teal-500 to-teal-600 text-white font-semibold shadow-md shadow-teal-500/20 hover:shadow-lg hover:shadow-teal-500/30 transition-all duration-300 hover:scale-105 active:scale-95'
+                className='shrink-0 whitespace-nowrap rounded-full bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-teal-500/20 transition-all duration-300 hover:bg-teal-500 hover:shadow-lg hover:shadow-teal-500/30 active:scale-95'
               >
                 Book Appointment
               </Link>
@@ -198,7 +197,7 @@ export default function Navbar() {
 
         {/* Mobile Hamburger */}
         <button
-          className='md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition'
+          className='lg:hidden text-white p-2 hover:bg-white/10 rounded-lg transition shrink-0'
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label='Toggle menu'
         >
@@ -210,12 +209,12 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu — ✅ এখানেও session-aware */}
+      {/* Mobile Menu — ✅ session-aware */}
       {mobileOpen && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className='md:hidden bg-gray-950/95 backdrop-blur-xl border-t border-gray-800/50 px-6 py-6 space-y-4'
+          className='lg:hidden bg-gray-950/95 backdrop-blur-xl border-t border-gray-800/50 px-6 py-6 space-y-4'
         >
           {navLinks.map((link) => (
             <SmoothLink
@@ -233,7 +232,7 @@ export default function Navbar() {
               <div className='w-full h-12 bg-gray-800 rounded-lg animate-pulse' />
             ) : isAuthenticated ? (
               <>
-                {/* ✅ User info card */}
+                {/* User info card */}
                 <div className='flex items-center gap-3 px-4 py-3 bg-gray-900 rounded-lg'>
                   <div className='w-10 h-10 rounded-full bg-teal-600 flex items-center justify-center text-white font-semibold'>
                     {user?.name?.charAt(0).toUpperCase()}
@@ -269,7 +268,7 @@ export default function Navbar() {
               <>
                 <Link
                   href='/signin'
-                  className='w-full text-center px-4 py-3 text-sm rounded-lg border border-gray-700 text-gray-300 font-medium hover:bg-gray-800 transition-all'
+                  className='w-full text-center px-4 py-3 text-sm rounded-lg border border-teal-700 text-gray-300 font-medium hover:bg-gray-800 transition-all'
                   onClick={() => setMobileOpen(false)}
                 >
                   Sign In
