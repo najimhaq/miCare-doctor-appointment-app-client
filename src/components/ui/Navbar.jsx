@@ -121,15 +121,19 @@ export default function Navbar() {
         {/* Logo */}
         <SmoothLink href='/'>
           <div className='flex items-center gap-2 cursor-pointer group shrink-0'>
-            <div className='w-9 h-9 bg-teal-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300'>
-              <HeartPulse className='w-5 h-5 text-white' aria-hidden='true' />
-            </div>
-            <span className='text-xl font-bold text-white flex items-center tracking-tight whitespace-nowrap'>
-              MiCare
-              <Plus
-                className='w-4 h-4 text-teal-500 ml-0.5 font-bold'
-                aria-hidden='true'
-              />
+            <motion.div
+              whileHover={{ rotate: 360, scale: 1.1 }}
+              transition={{ duration: 0.5 }}
+              className='w-10 h-10 rounded-full bg-linear-to-r from-cyan-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-cyan-500/25'
+            >
+              <HeartPulse className='w-6 h-6 text-white' />
+            </motion.div>
+            <span className='text-xl font-bold text-white flex items-center'>
+              Mi
+              <span className='bg-linear-to-r from-cyan-400 via-teal-400 to-emerald-400 bg-clip-text text-transparent'>
+                Care
+              </span>
+              <Plus className='w-4 h-4 text-teal-400 ml-0.5' />
             </span>
           </div>
         </SmoothLink>
