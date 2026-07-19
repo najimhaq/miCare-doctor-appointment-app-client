@@ -35,8 +35,6 @@ export default function Navbar() {
   const { user, isAuthenticated, isLoading, logout } = useAuth();
   // console.log('Navbar ', user);
 
-
-
   useEffect(() => {
     const isClosed = sessionStorage.getItem('promoBannerClosed');
     if (isClosed === 'true') {
@@ -72,7 +70,6 @@ export default function Navbar() {
     await logout();
   };
 
-   // ✅ এখন early return — সব hooks কল হয়ে যাওয়ার পরে
   if (pathname.includes('dashboard')) {
     return null;
   }
