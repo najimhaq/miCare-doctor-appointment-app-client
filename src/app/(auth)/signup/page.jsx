@@ -3,6 +3,7 @@
 import { SignUpForm } from '@/components/auth/SignUpForm';
 import { getRoleDashboardPath } from '@/lib/getRoleDashboardPath';
 import { getServerSession } from '@/lib/getServerSession';
+import { redirect } from 'next/navigation';
 
 export const metadata = {
   title: 'Signup - MiCare',

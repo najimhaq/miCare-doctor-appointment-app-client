@@ -263,3 +263,96 @@ html.lenis body {
 .delay-1000 {
   animation-delay: 1s;
 }
+
+/* Doctor card */
+@layer components {
+  .doctor-card {
+    @apply bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10
+           overflow-hidden transition-all duration-300
+           hover:border-cyan-400/50 hover:shadow-xl hover:shadow-cyan-500/10;
+  }
+
+  .doctor-card-image {
+    @apply relative h-48 md:h-56 overflow-hidden
+           bg-gradient-to-r from-cyan-500/20 via-teal-500/20 to-emerald-500/20;
+  }
+
+  .doctor-card-avatar {
+    @apply w-full h-full flex items-center justify-center;
+  }
+
+  .doctor-card-avatar-inner {
+    @apply w-24 h-24 md:w-32 md:h-32 rounded-full
+           bg-gradient-to-r from-cyan-500 to-emerald-500
+           flex items-center justify-center;
+  }
+
+  .doctor-card-avatar-text {
+    @apply text-4xl md:text-5xl font-bold text-white;
+  }
+
+  .doctor-card-content {
+    @apply p-4 md:p-5;
+  }
+
+  .doctor-card-name {
+    @apply text-lg font-semibold text-white hover:text-cyan-400 transition-colors line-clamp-1;
+  }
+
+  .doctor-card-specialty {
+    @apply flex items-center gap-2 mt-1 text-sm text-white/70 line-clamp-1;
+  }
+
+  .doctor-card-rating {
+    @apply flex items-center gap-2 mb-3;
+  }
+
+  .doctor-card-stars {
+    @apply flex items-center gap-0.5;
+  }
+
+  .doctor-card-star {
+    @apply w-3.5 h-3.5 text-yellow-400;
+  }
+
+  .doctor-card-details {
+    @apply grid grid-cols-2 gap-2 mb-4;
+  }
+
+  .doctor-card-detail-item {
+    @apply flex items-center gap-2 text-sm text-white/60;
+  }
+
+  .doctor-card-fee {
+    @apply flex items-center justify-between mb-4;
+  }
+
+  .doctor-card-fee-label {
+    @apply text-xs text-white/40;
+  }
+
+  .doctor-card-fee-amount {
+    @apply text-lg font-bold text-white;
+  }
+
+  .doctor-card-actions {
+    @apply flex flex-col sm:flex-row gap-2;
+  }
+
+  .doctor-card-book-btn {
+    @apply flex-1 px-4 py-2.5
+           bg-gradient-to-r from-cyan-500 to-emerald-500
+           rounded-lg text-white text-sm font-medium
+           transition-all duration-200
+           flex items-center justify-center gap-2
+           hover:shadow-lg hover:shadow-cyan-500/25;
+  }
+
+  .doctor-card-profile-btn {
+    @apply px-4 py-2.5
+           bg-white/5 hover:bg-white/10
+           rounded-lg text-white/70 hover:text-white
+           text-sm font-medium transition-all duration-200
+           flex items-center justify-center gap-2;
+  }
+}
