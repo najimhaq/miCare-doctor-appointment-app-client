@@ -20,7 +20,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     // Log in development
     if (process.env.NODE_ENV === 'development') {
-      console.log(`🔄 ${config.method?.toUpperCase()} ${config.url}`);
+      // console.log(`🔄 ${config.method?.toUpperCase()} ${config.url}`);
     }
     return config;
   },
