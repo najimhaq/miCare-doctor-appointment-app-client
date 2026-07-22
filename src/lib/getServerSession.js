@@ -1,46 +1,53 @@
-// frontend/lib/getServerSession.js
 import { headers } from 'next/headers';
-import { authClient } from '@/app/lib/auth-client';
 
 export async function getServerSession() {
+  const apiUrl = process.env.NEXT_PUBLIC_API_BACKEND_URL;
+
+  if (!apiUrl) {
+    console.error('❌ NEXT_PUBLIC_API_BACKEND_URL is not defined');
+    return null;
+  }
+
   try {
     const headersList = await headers();
     const cookieHeader = headersList.get('cookie') || '';
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_BACKEND_URL;
-
-    if (!apiUrl) {
-      console.error('NEXT_PUBLIC_API_BACKEND_URL is not defined');
-      return null;
-    }
-
-    // Better Auth এর session endpoint
-    const response = await fetch(`${apiUrl}/api/auth/get-session`, {
+    const res = await fetch(`${apiUrl}/api/auth/get-session`, {
       headers: {
-        Cookie: cookieHeader,
+        cookie: cookieHeader,
         'Content-Type': 'application/json',
       },
       cache: 'no-store',
+      credentials: 'include',
     });
 
-    if (!response.ok) {
-      console.error('Session fetch failed:', response.status);
+    if (!res.ok) {
+      if (res.status === 401) {
+        return null; // Session expired
+      }
+      console.error(`Session fetch failed: ${res.status}`);
       return null;
     }
 
-    const data = await response.json();
+    const data = await res.json();
 
-    // Transform data to match expected format
-    if (data?.user) {
-      return {
-        user: data.user,
-        accessToken: data.session?.accessToken || null,
-      };
+    // ✅ Validate response structure
+    if (!data?.user) {
+      return null;
     }
 
-    return null;
+    return {
+      user: {
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.name,
+        image: data.user.image || null,
+        role: data.user.role || 'PATIENT',
+      },
+      session: data.session || null,
+    };
   } catch (error) {
-    console.error('Server session fetch error:', error);
+    console.error('❌ Server session error:', error.message);
     return null;
   }
 }

@@ -1,31 +1,80 @@
-// lib/axiosInstance.js
 import axios from 'axios';
 
+const API_URL = process.env.NEXT_PUBLIC_API_BACKEND_URL;
+
+if (!API_URL) {
+  console.error('❌ NEXT_PUBLIC_API_BACKEND_URL is not defined');
+}
+
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BACKEND_URL || 'http://localhost:8000',
-  withCredentials: true, // Better Auth session cookie/token পাঠানোর জন্য
+  baseURL: API_URL || 'http://localhost:8000',
+  withCredentials: true, // ✅ Better Auth cookie automatically sent
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor - token attach করা
-axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token'); // বা authClient session থেকে
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// ✅ Request interceptor
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // Log in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🔄 ${config.method?.toUpperCase()} ${config.url}`);
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
-// Response interceptor - global error handling
+// ✅ Response interceptor with loop protection
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // token expired, redirect to login
+    // Network error
+    if (!error.response) {
+      console.error('🌐 Network error:', error.message);
+      return Promise.reject({
+        message: 'Network error – please check your connection',
+        status: 0,
+      });
     }
-    return Promise.reject(error);
+
+    const { status } = error.response;
+
+    // ✅ 401 - Unauthorized (with loop protection)
+    if (status === 401) {
+      if (typeof window !== 'undefined') {
+        const isAuthPage =
+          window.location.pathname.includes('/signin') ||
+          window.location.pathname.includes('/signup') ||
+          window.location.pathname === '/';
+
+        if (!isAuthPage) {
+          // Prevent redirect loop
+          const redirectKey = 'auth_redirecting';
+          if (!sessionStorage.getItem(redirectKey)) {
+            sessionStorage.setItem(redirectKey, 'true');
+            window.location.href = '/signin';
+          }
+        }
+      }
+    }
+
+    // ✅ 403 - Forbidden
+    if (status === 403) {
+      console.error('⛔ Forbidden:', error.response.data?.message);
+    }
+
+    // ✅ 500+ - Server error
+    if (status >= 500) {
+      console.error(
+        '💥 Server error:',
+        error.response.data?.message || 'Internal server error'
+      );
+    }
+
+    return Promise.reject(error.response?.data || error);
   }
 );
 

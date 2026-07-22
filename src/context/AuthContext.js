@@ -1,30 +1,28 @@
-// frontend/context/AuthContext.js
 'use client';
 
+import authClient from '@/app/lib/auth-client';
 import {
   createContext,
   useContext,
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from 'react';
-import { useRouter } from 'next/navigation';
-import { authClient } from '@/app/lib/auth-client';
+
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // ✅ Memoized refresh function
   const refreshSession = useCallback(async () => {
     try {
       setIsLoading(true);
-
-      // Better Auth client এর মাধ্যমে session fetch
       const { data, error } = await authClient.getSession();
 
       if (error) {
@@ -35,14 +33,20 @@ export function AuthProvider({ children }) {
       }
 
       if (data?.user) {
-        setUser(data.user);
+        setUser({
+          id: data.user.id,
+          email: data.user.email,
+          name: data.user.name,
+          image: data.user.image || null,
+          role: data.user.role || 'PATIENT',
+        });
         setIsAuthenticated(true);
       } else {
         setUser(null);
         setIsAuthenticated(false);
       }
-    } catch (err) {
-      console.error('Session fetch failed:', err);
+    } catch (error) {
+      console.error('Session fetch error:', error);
       setUser(null);
       setIsAuthenticated(false);
     } finally {
@@ -54,64 +58,62 @@ export function AuthProvider({ children }) {
     refreshSession();
   }, [refreshSession]);
 
-  const logout = async () => {
+  // ✅ Login with error handling
+  const login = useCallback(
+    async (email, password) => {
+      try {
+        const { data, error } = await authClient.signIn.email({
+          email,
+          password,
+        });
+        if (error) throw error;
+        await refreshSession();
+        toast.success('Welcome back!');
+        return { success: true, data };
+      } catch (error) {
+        toast.error(error.message || 'Login failed');
+        return { success: false, error };
+      }
+    },
+    [refreshSession]
+  );
+
+  // ✅ Signup with auto login
+  const signup = useCallback(
+    async (email, password, name) => {
+      try {
+        const { data, error } = await authClient.signUp.email({
+          email,
+          password,
+          name,
+        });
+        if (error) throw error;
+        await refreshSession();
+        toast.success('Account created successfully!');
+        return { success: true, data };
+      } catch (error) {
+        toast.error(error.message || 'Signup failed');
+        return { success: false, error };
+      }
+    },
+    [refreshSession]
+  );
+
+  // ✅ Logout
+  const logout = useCallback(async () => {
     try {
       await authClient.signOut();
       setUser(null);
       setIsAuthenticated(false);
-      toast.success('Logged out successfully');
-      router.push('/');
-      router.refresh();
+      toast.success('Logged out');
     } catch (error) {
       console.error('Logout error:', error);
-      toast.error('Failed to logout');
+      toast.error('Logout failed');
     }
-  };
+  }, []);
 
-  const login = async (email, password) => {
-    try {
-      const { data, error } = await authClient.signIn.email({
-        email,
-        password,
-      });
-
-      if (error) {
-        toast.error(error.message || 'Login failed');
-        return { success: false, error };
-      }
-
-      await refreshSession();
-      toast.success('Logged in successfully');
-      return { success: true, data };
-    } catch (error) {
-      toast.error(error.message || 'Login failed');
-      return { success: false, error };
-    }
-  };
-
-  const signup = async (email, password, name) => {
-    try {
-      const { data, error } = await authClient.signUp.email({
-        email,
-        password,
-        name,
-      });
-
-      if (error) {
-        toast.error(error.message || 'Signup failed');
-        return { success: false, error };
-      }
-
-      await refreshSession();
-      toast.success('Account created successfully');
-      return { success: true, data };
-    } catch (error) {
-      toast.error(error.message || 'Signup failed');
-      return { success: false, error };
-    }
-  };
-
-  const socialLogin = async (provider) => {
+  // ✅ Social Login
+  const socialLogin = useCallback(async (provider) => {
     try {
       await authClient.signIn.social({
         provider,
@@ -121,24 +123,33 @@ export function AuthProvider({ children }) {
       console.error('Social login error:', error);
       toast.error('Social login failed');
     }
-  };
+  }, []);
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated,
-        isLoading,
-        logout,
-        login,
-        signup,
-        socialLogin,
-        refreshSession,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+  // ✅ Memoized context value
+  const value = useMemo(
+    () => ({
+      user,
+      isAuthenticated,
+      isLoading,
+      login,
+      signup,
+      logout,
+      socialLogin,
+      refreshSession,
+    }),
+    [
+      user,
+      isAuthenticated,
+      isLoading,
+      login,
+      signup,
+      logout,
+      socialLogin,
+      refreshSession,
+    ]
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
