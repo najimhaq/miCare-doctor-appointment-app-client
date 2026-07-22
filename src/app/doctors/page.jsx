@@ -1,49 +1,35 @@
-// frontend/app/doctors/page.jsx
+// app/doctors/page.jsx
 import { getServerSession } from '@/lib/getServerSession';
-import { Suspense } from 'react';
 import DoctorsClient from './DoctorsClient';
-import Loading from './loading';
+import axiosInstance from '@/lib/api/axiosInstance';
 
-// This runs on the server
+// app/doctors/page.jsx
 const DoctorsMainPage = async () => {
   const session = await getServerSession();
-  console.log(DoctorsMainPage, session);
+  const user = session?.user || null;
 
-  // Fetch doctors on server
-  let initialDoctors = [];
+  let initialData = { doctors: [], pagination: null };
   let error = null;
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BACKEND_URL}/api/doctors`, {
-      headers: {
-        Authorization: session?.accessToken
-          ? `Bearer ${session.accessToken}`
-          : '',
-        'Content-Type': 'application/json',
-      },
-      cache: 'no-store',
-    });
-
-    if (response.ok) {
-      initialDoctors = await response.json();
-      console.log('initialDoctors', initialDoctors);
-    } else {
-      error = `Failed to fetch: ${response.status}`;
-    }
+    const response = await axiosInstance.get('/api/doctors?page=1&limit=9');
+    initialData = {
+      doctors: response.data?.data || [],
+      pagination: response.data?.pagination || null,
+    };
   } catch (err) {
-    console.error('Error:', err);
-    error = err.message;
+    error = err.message || 'Failed to fetch doctors';
   }
 
-  // Pass data to client component
   return (
-    <Suspense fallback={<Loading />}>
+    <div className="min-h-screen bg-black py-12">
       <DoctorsClient
-        initialDoctors={initialDoctors}
+        initialDoctors={initialData.doctors}
+        initialPagination={initialData.pagination}
         error={error}
-        session={session}
+        session={user}
       />
-    </Suspense>
+    </div>
   );
 };
 

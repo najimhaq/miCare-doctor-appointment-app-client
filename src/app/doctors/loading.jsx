@@ -9,3 +9,12 @@ export default function Loading() {
     </div>
   );
 }
+
+
+/* <Suspense fallback={<Loading />}>
+      <DoctorsClient
+        initialDoctors={initialDoctors}
+        error={error}
+        session={session}
+      />
+    </Suspense> */

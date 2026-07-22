@@ -3,26 +3,14 @@
 
 import { useEffect, useState } from 'react';
 import { Calendar, Clock, CheckCircle, XCircle } from 'lucide-react';
-import { ClipLoader } from 'react-spinners';
-import api from '@/lib/api/axiosApi';
+import { ClipLoader, RiseLoader } from 'react-spinners';
+import { useApi } from '@/hooks/useApi';
 
 export default function PatientDashboardClient({ user }) {
-  const [appointments, setAppointments] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const res = await api.get('/api/appointments/my');
-        setAppointments(res.data.appointments || []);
-      } catch (err) {
-        console.error('Failed to load appointments', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchAppointments();
-  }, []);
+  const { data, loading, error } = useApi('/api/appointments/my'); // ✅ hook সরাসরি এখানে
+  if (loading) return <RiseLoader color='#008080' />;
+  if (error) return <p>Error: {error}</p>;
+  const appointments = data?.appointments || [];
 
   const stats = {
     total: appointments.length,
