@@ -4,7 +4,8 @@
 //যদি তোমার project এ axios dependency আগে থেকেই থাকে → axiosInstance ব্যবহার করো।
 // যদি dependency কম রাখতে চাও → apiClient ব্যবহার করো।
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_BACKEND_URL || 'http://localhost:8000';
 
 
 async function request(endpoint, options = {}) {

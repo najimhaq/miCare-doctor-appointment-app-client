@@ -115,7 +115,7 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
         </motion.button>
       </div>
 
-      <div className='relative h-48 md:h-56 overflow-hidden bg-gradient-to-r from-cyan-500/20 via-teal-500/20 to-emerald-500/20'>
+      <div className='relative h-48 md:h-56 overflow-hidden bg-linear-to-r from-cyan-500/20 via-teal-500/20 to-emerald-500/20'>
         {showImage ? (
           <Image
             src={doctorImage}
@@ -127,7 +127,7 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
           />
         ) : (
           <div className='w-full h-full flex items-center justify-center'>
-            <div className='w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500 flex items-center justify-center'>
+            <div className='w-24 h-24 md:w-32 md:h-32 rounded-full bg-linear-to-r from-cyan-500 to-emerald-500 flex items-center justify-center'>
               <span className='text-4xl md:text-5xl font-bold text-white'>
                 {getInitials(doctorName)}
               </span>
@@ -225,7 +225,7 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
         <div className='flex flex-col sm:flex-row gap-2'>
           <motion.button
             onClick={handleBookAppointment}
-            className='flex-1 px-4 py-2.5 bg-gradient-to-r from-cyan-500 to-emerald-500 rounded-lg text-white text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-cyan-500/25'
+            className='flex-1 px-4 py-2.5 bg-linear-to-r from-cyan-500 to-emerald-500 rounded-lg text-white text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 hover:shadow-lg hover:shadow-cyan-500/25'
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >

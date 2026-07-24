@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   FiSearch,
@@ -10,8 +10,9 @@ import {
   FiChevronRight,
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
-import DoctorCard from '@/components/dashboard/DoctorCard';
+
 import axiosInstance from '@/lib/api/axiosInstance';
+import DoctorCard from '@/components/dashboard/DoctorCard';
 
 export default function DoctorsClient({
   initialDoctors,
@@ -27,8 +28,16 @@ export default function DoctorsClient({
   const [searchTerm, setSearchTerm] = useState('');
   const [filterSpecialty, setFilterSpecialty] = useState('');
   const [page, setPage] = useState(1);
+  const [specialties, setSpecialties] = useState([]);
 
-  const fetchDoctors = async (targetPage = 1) => {
+  useEffect(() => {
+    axiosInstance
+      .get('/api/doctors/specialties')
+      .then((res) => setSpecialties(res.data?.data || []))
+      .catch((err) => console.error('Failed to load specialties:', err));
+  }, []);
+
+  const fetchDoctors = async (targetPage = 1, overrideSpecialty) => {
     setLoading(true);
     setError(null);
     try {
@@ -37,7 +46,10 @@ export default function DoctorsClient({
           page: targetPage,
           limit: 9,
           search: searchTerm || undefined,
-          specialty: filterSpecialty || undefined,
+          specialty:
+            overrideSpecialty !== undefined
+              ? overrideSpecialty
+              : filterSpecialty || undefined,
         },
       });
       setDoctors(response.data?.data || []);
@@ -120,13 +132,14 @@ export default function DoctorsClient({
               <select
                 value={filterSpecialty}
                 onChange={(e) => {
-                  setFilterSpecialty(e.target.value);
-                  fetchDoctors(1);
+                  const value = e.target.value;
+                  setFilterSpecialty(value);
+                  fetchDoctors(1, value);
                 }}
                 className='pl-10 pr-8 py-2 bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-cyan-400 transition'
               >
                 <option value=''>All Specialties</option>
-                {[...new Set(doctors.map((d) => d.specialization))].map((s) => (
+                {specialties.map((s) => (
                   <option key={s} value={s} className='bg-slate-800'>
                     {s}
                   </option>

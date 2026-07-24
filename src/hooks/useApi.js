@@ -13,6 +13,10 @@ export function useApi(endpoint, options = {}, dependencies = []) {
   const [error, setError] = useState(null);
 
   const fetchData = useCallback(async () => {
+    if (!endpoint) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -25,7 +29,7 @@ export function useApi(endpoint, options = {}, dependencies = []) {
     } finally {
       setLoading(false);
     }
-  }, [endpoint, JSON.stringify(options)]); // ✅ Proper dependency
+  }, [endpoint, JSON.stringify(options)]);
 
   useEffect(() => {
     fetchData();

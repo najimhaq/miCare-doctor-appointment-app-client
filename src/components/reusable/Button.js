@@ -1,43 +1,42 @@
-import { ClipLoader } from 'react-spinners';
+// components/ui/button.jsx
+import { forwardRef } from 'react';
+import { cn } from '@/lib/utils'; // যদি ব্যবহার করেন
 
-export default function Button({
-  children,
-  type = 'button',
-  variant = 'primary',
-  loading = false,
-  disabled = false,
-  className = '',
-  onClick,
-  ...props
-}) {
-  const baseStyles =
-    'px-6 py-2.5 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed';
+export const Button = forwardRef(
+  (
+    {
+      children,
+      className,
+      variant = 'primary',
+      loading = false, // ✅ destructure করে আলাদা রাখা হলো
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <button
+        ref={ref}
+        disabled={disabled || loading} // ✅ loading হলে বাটন নিজে থেকেই disable
+        className={cn(
+          'inline-flex items-center justify-center gap-2 rounded-lg font-medium transition disabled:opacity-50 disabled:cursor-not-allowed',
+          variant === 'primary' && 'bg-cyan-500 text-white hover:bg-cyan-600',
+          variant === 'secondary' && 'bg-white/5 text-white hover:bg-white/10',
+          className
+        )}
+        {...props} // ✅ এখন loading এর মধ্যে নেই, তাই DOM-এ যাবে না
+      >
+        {loading ? (
+          <span className='flex items-center gap-2'>
+            <span className='w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin' />
+            Loading...
+          </span>
+        ) : (
+          children
+        )}
+      </button>
+    );
+  }
+);
 
-  const variants = {
-    primary:
-      'bg-gradient-to-r from-cyan-500 to-emerald-500 text-white hover:shadow-lg hover:shadow-cyan-500/25 active:scale-95',
-    secondary: 'bg-white/5 text-white hover:bg-white/10 active:scale-95',
-    danger: 'bg-red-500/20 text-red-400 hover:bg-red-500/30 active:scale-95',
-    outline:
-      'border border-white/20 text-white hover:bg-white/5 active:scale-95',
-  };
-
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      disabled={disabled || loading}
-      className={`${baseStyles} ${variants[variant]} ${className}`}
-      {...props}
-    >
-      {loading ? (
-        <>
-          <ClipLoader size={18} color='currentColor' />
-          Loading...
-        </>
-      ) : (
-        children
-      )}
-    </button>
-  );
-}
+Button.displayName = 'Button';
