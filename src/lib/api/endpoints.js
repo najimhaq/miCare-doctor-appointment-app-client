@@ -23,6 +23,7 @@ const API = {
     patients: '/api/doctor/patients',
     allDoctors: '/api/all-doctors',
     doctorById: (id) => `/api/all-doctors/${id}`,
+    appointmentHistory: '/api/appointments/doctor/history',
   },
 
   // Common
@@ -31,7 +32,8 @@ const API = {
   bookAppointment: '/api/appointments/book',
   specialties: '/api/specialties',
   appointmentById: (id) => `/api/appointments/${id}`,
-  appointmentRestore: (id) => `/api/appointments/${id}/restore`,
+  appointmentRestore: (id) => `/api/appointments/${id}/restore`, //patient only
+  appointmentStatus: (id) => `/api/appointments/${id}/status`, //doctor only
 };
 
 export default API;

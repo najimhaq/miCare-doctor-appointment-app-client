@@ -153,7 +153,7 @@ export default function SignInForm() {
             <button
               type='submit'
               disabled={isLoading}
-              className='w-full flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold rounded-lg shadow-lg shadow-teal-500/20 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed'
+              className='w-full flex items-center justify-center gap-2 py-3 px-4 bg-linear-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold rounded-lg shadow-lg shadow-teal-500/20 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed'
             >
               {isLoading ? (
                 <ClipLoader size={20} color='#ffffff' />

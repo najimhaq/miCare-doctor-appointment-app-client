@@ -5,16 +5,18 @@ import {
   createContext,
   useContext,
   useEffect,
-  useState,
   useCallback,
   useMemo,
+  useState,
 } from 'react';
 
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -106,11 +108,13 @@ export function AuthProvider({ children }) {
       setUser(null);
       setIsAuthenticated(false);
       toast.success('Logged out');
+      router.push('/');
+      router.refresh();
     } catch (error) {
       console.error('Logout error:', error);
       toast.error('Logout failed');
     }
-  }, []);
+  }, [router]);
 
   // ✅ Social Login
   const socialLogin = useCallback(async (provider) => {

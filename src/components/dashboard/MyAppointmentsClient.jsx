@@ -17,7 +17,6 @@ import axiosInstance from '@/lib/api/axiosInstance';
 import API from '@/lib/api/endpoints';
 import BookingModal from './BookingModal';
 
-
 const STATUS_STYLES = {
   PENDING: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
   CONFIRMED: 'bg-green-500/20 text-green-400 border-green-500/30',
@@ -64,6 +63,7 @@ export default function MyAppointmentsClient({
     }
   };
 
+
   const handleCancel = async (id) => {
     if (!confirm('Are you sure you want to cancel this appointment?')) return;
 
@@ -84,9 +84,6 @@ export default function MyAppointmentsClient({
       setCancellingId(null);
     }
   };
-
-
-
 
   const handleRestore = async (id) => {
     setRestoringId(id);

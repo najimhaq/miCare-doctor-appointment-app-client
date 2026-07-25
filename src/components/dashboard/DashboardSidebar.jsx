@@ -20,6 +20,7 @@ import {
 import { FiUser } from 'react-icons/fi';
 import { useAuth } from '@/context/AuthContext';
 import Image from 'next/image';
+import { useState } from 'react';
 
 
 const MENU_BY_ROLE = {
@@ -48,6 +49,13 @@ export default function DashboardSidebar({ user }) {
   const pathname = usePathname();
   const { logout } = useAuth();
   const menu = MENU_BY_ROLE[user.role] || [];
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    await logout();
+    setLoggingOut(false);
+  };
 
 
   return (
@@ -120,11 +128,12 @@ export default function DashboardSidebar({ user }) {
           </div>
         </div>
         <button
-          onClick={logout}
-          className='flex items-center gap-2 w-full px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors'
+          onClick={handleLogout}
+          disabled={loggingOut}
+          className='flex items-center gap-2 w-full px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors disabled:opacity-50'
         >
           <LogOut className='w-4 h-4' />
-          Logout
+          {loggingOut ? 'Logging out...' : 'Logout'}
         </button>
       </div>
     </aside>
