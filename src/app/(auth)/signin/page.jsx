@@ -12,7 +12,7 @@ export const metadata = {
 
 export default async function SignInPage() {
   const session = await getServerSession();
-  console.log('SignInPage', session);
+  // console.log('SignInPage', session);
 
   if (session?.user) {
     redirect(getRoleDashboardPath(session.user.role));

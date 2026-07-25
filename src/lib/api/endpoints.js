@@ -21,12 +21,12 @@ const API = {
     profile: '/api/doctor/profile',
     appointments: '/api/doctor/appointments',
     patients: '/api/doctor/patients',
-    allDoctors: '/api/doctors', 
-    doctorById: (id) => `/api/doctors/${id}`,
+    allDoctors: '/api/all-doctors',
+    doctorById: (id) => `/api/all-doctors/${id}`,
   },
 
   // Common
-  doctors: '/api/doctors',
+  doctors: '/api/all-doctors',
   appointments: '/api/appointments',
   bookAppointment: '/api/appointments/book',
   specialties: '/api/specialties',

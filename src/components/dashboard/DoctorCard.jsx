@@ -233,7 +233,7 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
             Book Appointment
           </motion.button>
 
-          <Link href={`/doctors/${doctor?.id}`}>
+          <Link href={`/all-doctors/${doctor?.id}`}>
             <motion.button
               className='px-4 py-2.5 bg-white/5 hover:bg-white/10 rounded-lg text-white/70 hover:text-white text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2'
               whileHover={{ scale: 1.02 }}

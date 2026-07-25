@@ -8,7 +8,7 @@ export async function generateMetadata({ params }) {
   const { id } = await params;
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BACKEND_URL}/api/doctors/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BACKEND_URL}/api/all-doctors/${id}`,
       { cache: 'no-store' }
     );
     if (!res.ok) return { title: 'Doctor Not Found' };
@@ -33,7 +33,7 @@ export default async function DoctorDetailsPage({ params }) {
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BACKEND_URL}/api/doctors/${id}`,
+      `${process.env.NEXT_PUBLIC_API_BACKEND_URL}/api/all-doctors/${id}`,
       {
         headers: {
           Authorization: session?.accessToken
@@ -51,7 +51,7 @@ export default async function DoctorDetailsPage({ params }) {
     }
 
     const json = await res.json();
-    doctor = json.data; // ✅ reassign, নতুন declare না — এবং .data unwrap
+    doctor = json.data;
   } catch (err) {
     console.error('Error fetching doctor:', err);
     error = err.message;

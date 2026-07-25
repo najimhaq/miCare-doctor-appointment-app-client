@@ -23,7 +23,7 @@ const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'Services', href: '/services' },
   { name: 'About us', href: '/about-us' },
-  { name: 'Doctors', href: '/doctors' },
+  { name: 'Doctors', href: '/all-doctors' },
   { name: 'Contact', href: '/contact' },
 ];
 
@@ -71,7 +71,7 @@ export default function Navbar() {
   };
 
   // ✅ Public paths where navbar should be visible
-  const publicPaths = ['/', '/services', '/about', '/doctors', '/contact'];
+  const publicPaths = ['/', '/services', '/about', '/all-doctors', '/contact'];
 
   // ✅ Check if current path is a public path
   const isPublicPath = publicPaths.some(

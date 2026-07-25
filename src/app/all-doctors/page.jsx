@@ -12,7 +12,7 @@ const DoctorsMainPage = async () => {
   let error = null;
 
   try {
-    const response = await axiosInstance.get('/api/doctors?page=1&limit=9');
+    const response = await axiosInstance.get('/api/all-doctors?page=1&limit=9');
     initialData = {
       doctors: response.data?.data || [],
       pagination: response.data?.pagination || null,

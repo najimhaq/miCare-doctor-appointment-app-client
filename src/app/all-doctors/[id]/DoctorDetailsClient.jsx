@@ -52,6 +52,7 @@ const DAY_NAMES = [
 ];
 
 export default function DoctorDetailsClient({ doctor, session, error }) {
+  console.log('DoctorDetailsClient', doctor);
   const { isAuthenticated } = useAuth();
   const [isFavorite, setIsFavorite] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
@@ -464,7 +465,7 @@ export default function DoctorDetailsClient({ doctor, session, error }) {
                             onClick={() => setSelectedTime(slot)}
                             className={`px-3 py-2 rounded-lg text-sm font-medium transition ${
                               selectedTime === slot
-                                ? 'bg-gradient-to-r from-cyan-500 to-emerald-500 text-white'
+                                ? 'bg-linear-to-r from-cyan-500 to-emerald-500 text-white'
                                 : 'bg-white/5 text-white/70 hover:bg-white/10'
                             }`}
                           >

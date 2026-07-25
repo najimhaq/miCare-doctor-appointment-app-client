@@ -32,7 +32,7 @@ export default function DoctorsClient({
 
   useEffect(() => {
     axiosInstance
-      .get('/api/doctors/specialties')
+      .get('/api/all-doctors/specialties')
       .then((res) => setSpecialties(res.data?.data || []))
       .catch((err) => console.error('Failed to load specialties:', err));
   }, []);
@@ -41,7 +41,7 @@ export default function DoctorsClient({
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.get('/api/doctors', {
+      const response = await axiosInstance.get('/api/all-doctors', {
         params: {
           page: targetPage,
           limit: 9,

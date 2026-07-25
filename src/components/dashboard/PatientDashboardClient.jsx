@@ -1,13 +1,12 @@
 // components/dashboard/PatientDashboardClient.js
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Calendar, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { ClipLoader, RiseLoader } from 'react-spinners';
 import { useApi } from '@/hooks/useApi';
 
 export default function PatientDashboardClient({ user }) {
-  const { data, loading, error } = useApi('/api/appointments/my'); // ✅ hook সরাসরি এখানে
+  const { data, loading, error } = useApi('/api/appointments/my-appointments');
   if (loading) return <RiseLoader color='#008080' />;
   if (error) return <p>Error: {error}</p>;
   const appointments = data?.appointments || [];
@@ -64,7 +63,7 @@ export default function PatientDashboardClient({ user }) {
           Recent Appointments
         </h2>
 
-        {isLoading ? (
+        {loading ? (
           <div className='flex justify-center py-10'>
             <ClipLoader size={28} color='#14b8a6' />
           </div>
@@ -85,7 +84,8 @@ export default function PatientDashboardClient({ user }) {
                     {appt.doctor?.user?.name}
                   </p>
                   <p className='text-sm text-gray-500'>
-                    {new Date(appt.date).toLocaleDateString()} · {appt.timeSlot}
+                    {new Date(appt.appointmentDate).toLocaleDateString()} ·{' '}
+                    {appt.startTime} - {appt.endTime}
                   </p>
                 </div>
                 <StatusBadge status={appt.status} />

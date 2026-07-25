@@ -84,7 +84,7 @@ export function SignUpForm() {
         name: data.name.trim(),
         role: data.role,
         image: imageUrl,
-        callbackURL: '/dashboard',
+        callbackURL: '/',
       });
 
       if (error) {
@@ -94,7 +94,7 @@ export function SignUpForm() {
 
       toast.success('Account created successfully!');
       await refreshSession();
-      router.push('/dashboard');
+      router.push('/');
     } catch (err) {
       toast.error(err.message || 'Something went wrong');
     } finally {
