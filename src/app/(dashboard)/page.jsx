@@ -3,7 +3,7 @@ import { getRoleDashboardPath } from '@/lib/getRoleDashboardPath';
 import { getServerSession } from '@/lib/getServerSession';
 import { redirect } from 'next/navigation';
 
-export default async function DashboardMainPage() {
+export default async function PatientDashboardMainPage() {
   const session = await getServerSession();
 //   console.log('DashboardMainPage', session);
 
