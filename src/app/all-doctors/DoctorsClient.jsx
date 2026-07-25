@@ -13,12 +13,15 @@ import toast from 'react-hot-toast';
 
 import axiosInstance from '@/lib/api/axiosInstance';
 import DoctorCard from '@/components/dashboard/DoctorCard';
+import { useAuth } from '@/context/AuthContext';
+import BookingModal from '@/components/dashboard/BookingModal';
 
 export default function DoctorsClient({
   initialDoctors,
   initialPagination,
   error: initialError,
 }) {
+  const { isAuthenticated } = useAuth();
   const [doctors, setDoctors] = useState(
     Array.isArray(initialDoctors) ? initialDoctors : []
   );
@@ -29,6 +32,9 @@ export default function DoctorsClient({
   const [filterSpecialty, setFilterSpecialty] = useState('');
   const [page, setPage] = useState(1);
   const [specialties, setSpecialties] = useState([]);
+
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
 
   useEffect(() => {
     axiosInstance
@@ -65,6 +71,20 @@ export default function DoctorsClient({
   };
 
   const handleSearch = () => fetchDoctors(1);
+
+  const handleBookAppointment = (doctor) => {
+    if (!isAuthenticated) {
+      toast.error('Please login to book appointment');
+      return;
+    }
+    setSelectedDoctor(doctor);
+    setShowBookingModal(true);
+  };
+
+  const closeBookingModal = () => {
+    setShowBookingModal(false);
+    setSelectedDoctor(null);
+  };
 
   if (loading) {
     return (
@@ -165,7 +185,10 @@ export default function DoctorsClient({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
                 >
-                  <DoctorCard doctor={doctor} />
+                  <DoctorCard
+                    doctor={doctor}
+                    onBookAppointment={handleBookAppointment}
+                  />
                 </motion.div>
               ))}
             </div>
@@ -199,6 +222,10 @@ export default function DoctorsClient({
           </div>
         )}
       </div>
+
+      {showBookingModal && selectedDoctor && (
+        <BookingModal doctor={selectedDoctor} onClose={closeBookingModal} />
+      )}
     </div>
   );
 }

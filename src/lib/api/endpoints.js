@@ -27,9 +27,11 @@ const API = {
 
   // Common
   doctors: '/api/all-doctors',
-  appointments: '/api/appointments',
+  myAppointments: '/api/appointments/my-appointments',
   bookAppointment: '/api/appointments/book',
   specialties: '/api/specialties',
+  appointmentById: (id) => `/api/appointments/${id}`,
+  appointmentRestore: (id) => `/api/appointments/${id}/restore`,
 };
 
 export default API;

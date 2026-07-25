@@ -118,6 +118,20 @@ export default function DoctorDetailsClient({ doctor, session, error }) {
     }
   };
 
+  const handleShare = () => {
+    const shareData = {
+      title: `Dr. ${doctor.user?.name}`,
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      navigator.share(shareData).catch(() => {});
+    } else {
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => toast.success('Link copied!'));
+    }
+  };
+
   const handleBookAppointment = async () => {
     if (!isAuthenticated) {
       toast.error('Please login to book appointment');
@@ -230,18 +244,7 @@ export default function DoctorDetailsClient({ doctor, session, error }) {
                         />
                       </button>
                       <button
-                        onClick={() => {
-                          navigator
-                            .share?.({
-                              title: `Dr. ${doctor.user?.name}`,
-                              url: window.location.href,
-                            })
-                            .catch(() =>
-                              navigator.clipboard
-                                .writeText(window.location.href)
-                                .then(() => toast.success('Link copied!'))
-                            );
-                        }}
+                        onClick={handleShare}
                         className='p-2 rounded-full bg-white/5 hover:bg-white/10 transition'
                       >
                         <FiShare2 className='w-5 h-5 text-white/60' />

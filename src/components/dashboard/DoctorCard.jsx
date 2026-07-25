@@ -20,11 +20,13 @@ import {
 } from 'react-icons/fa';
 import { FiHeart, FiShare2, FiMail } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const DoctorCard = ({ doctor, onBookAppointment }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [imgError, setImgError] = useState(false);
 
+  const router = useRouter();
   const rating = doctor?.rating ?? 0;
   const totalReviews = doctor?.totalReviews ?? 0;
   const fullStars = Math.floor(rating);
@@ -43,6 +45,10 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
   const doctorImage = doctor?.image || doctor?.user?.image;
   const showImage = Boolean(doctorImage) && !imgError;
   const isApproved = doctor?.isApproved !== false;
+  const schedules = doctor.schedules || [];
+  const availableDayNumbers = schedules
+    .filter((s) => s.isAvailable)
+    .map((s) => s.dayOfWeek);
 
   const getInitials = (name) => {
     if (!name) return 'D';
@@ -67,14 +73,17 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
     e.preventDefault();
     e.stopPropagation();
     if (navigator.share) {
-      navigator.share({
-        title: `Dr. ${doctorName}`,
-        text: `Check out Dr. ${doctorName} - ${doctor?.specialization}`,
-        url: window.location.href,
-      });
+      navigator
+        .share({
+          title: `Dr. ${doctorName}`,
+          text: `Check out Dr. ${doctorName} - ${doctor?.specialization}`,
+          url: window.location.href,
+        })
+        .catch(() => {});
     } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success('Link copied to clipboard!');
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => toast.success('Link copied to clipboard!'));
     }
   };
 
@@ -84,7 +93,7 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
     if (onBookAppointment) {
       onBookAppointment(doctor);
     } else {
-      window.location.href = `/dashboard/patient/appointments/book?doctorId=${doctor.id}`;
+      router.push(`/doctors/${doctor.id}`); // ✅ client-side navigation, সঠিক route
     }
   };
 
@@ -150,7 +159,7 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
 
       <div className='p-4 md:p-5'>
         <div className='mb-3'>
-          <Link href={`/doctors/${doctor?.id}`}>
+          <Link href={`/all-doctors/${doctor?.id}`}>
             <h3 className='text-lg font-semibold text-white hover:text-cyan-400 transition-colors line-clamp-1'>
               Dr. {doctorName}
             </h3>
@@ -211,7 +220,7 @@ const DoctorCard = ({ doctor, onBookAppointment }) => {
               ৳{doctor?.consultationFee ?? 500}
             </p>
           </div>
-          {isApproved && (
+          {availableDayNumbers.length > 0 && (
             <div className='flex items-center gap-1 text-xs text-green-400'>
               <span className='relative flex h-2 w-2'>
                 <span className='animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75'></span>
