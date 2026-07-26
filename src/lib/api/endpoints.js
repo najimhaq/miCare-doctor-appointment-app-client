@@ -3,8 +3,9 @@ const API = {
   // Auth
   auth: {
     session: '/api/auth/get-session',
-    signout: '/api/auth/signout',
+    me: '/api/auth/me',
     profile: '/api/auth/profile',
+    signout: '/api/auth/signout',
   },
 
   // Patient
@@ -19,6 +20,7 @@ const API = {
   // Doctor
   doctor: {
     profile: '/api/doctor/profile',
+    dashboardStats: '/api/appointments/doctor/dashboard-stats',
     appointments: '/api/doctor/appointments',
     patients: '/api/doctor/patients',
     allDoctors: '/api/all-doctors',

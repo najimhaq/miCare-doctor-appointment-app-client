@@ -12,6 +12,8 @@ import {
 
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import axiosInstance from '@/lib/api/axiosInstance';
+import API from '@/lib/api/endpoints';
 
 const AuthContext = createContext(null);
 
@@ -27,26 +29,24 @@ export function AuthProvider({ children }) {
       setIsLoading(true);
       const { data, error } = await authClient.getSession();
 
-      if (error) {
-        console.error('Session error:', error);
+      if (error || !data?.user) {
         setUser(null);
         setIsAuthenticated(false);
         return;
       }
 
-      if (data?.user) {
-        setUser({
-          id: data.user.id,
-          email: data.user.email,
-          name: data.user.name,
-          image: data.user.image || null,
-          role: data.user.role || 'PATIENT',
-        });
-        setIsAuthenticated(true);
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
+      // ✅ ডাটাবেজ থেকে fresh role fetch করুন
+      const meRes = await axiosInstance.get(API.auth.me).catch(() => null);
+      const freshRole = meRes?.data?.data?.role;
+
+      setUser({
+        id: data.user.id,
+        email: data.user.email,
+        name: data.user.name,
+        image: data.user.image || null,
+        role: freshRole || data.user.role || 'PATIENT', // ✅ fresh role prioritize
+      });
+      setIsAuthenticated(true);
     } catch (error) {
       console.error('Session fetch error:', error);
       setUser(null);

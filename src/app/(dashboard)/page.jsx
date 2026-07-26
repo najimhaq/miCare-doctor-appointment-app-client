@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 
 export default async function PatientDashboardMainPage() {
   const session = await getServerSession();
-//   console.log('DashboardMainPage', session);
+  // console.log('DashboardMainPage', session);
 
   if (session?.user) {
     redirect(getRoleDashboardPath(session.user.role));

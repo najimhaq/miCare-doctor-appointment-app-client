@@ -9,7 +9,6 @@ import DoctorDashboardClient from '@/components/dashboard/DoctorDashboardClient'
 const DoctorDashboardPage = async () => {
   const session = await getServerSession();
   const user = session?.user || null;
-
   let initialData = null;
   let error = null;
 
@@ -19,6 +18,7 @@ const DoctorDashboardPage = async () => {
       headers: { Cookie: cookieStore.toString() },
     });
     initialData = response.data?.data || null;
+    // console.log('DoctorDashboardPage data', initialData);
   } catch (err) {
     error = err.message || 'Failed to fetch dashboard data';
   }

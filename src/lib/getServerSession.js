@@ -13,27 +13,39 @@ export async function getServerSession() {
     const cookieHeader = headersList.get('cookie') || '';
 
     const res = await fetch(`${apiUrl}/api/auth/get-session`, {
-      headers: {
-        cookie: cookieHeader,
-        'Content-Type': 'application/json',
-      },
+      headers: { cookie: cookieHeader, 'Content-Type': 'application/json' },
       cache: 'no-store',
       credentials: 'include',
     });
 
     if (!res.ok) {
-      if (res.status === 401) {
-        return null; // Session expired
-      }
+      if (res.status === 401) return null;
       console.error(`Session fetch failed: ${res.status}`);
       return null;
     }
 
     const data = await res.json();
+    if (!data?.user) return null;
 
-    // ✅ Validate response structure
-    if (!data?.user) {
-      return null;
+    // ✅ DB থেকে fresh role ফেচ করুন
+    let freshRole = data.user.role;
+    try {
+      const meRes = await fetch(`${apiUrl}/api/auth/me`, {
+        headers: { cookie: cookieHeader, 'Content-Type': 'application/json' },
+        cache: 'no-store',
+        credentials: 'include',
+      });
+      if (meRes.ok) {
+        const meData = await meRes.json();
+        if (meData?.data?.role) {
+          freshRole = meData.data.role; // ✅ override stale role
+        }
+      }
+    } catch (meErr) {
+      console.error(
+        '⚠️ /me fetch failed, falling back to session role:',
+        meErr.message
+      );
     }
 
     return {
@@ -42,7 +54,7 @@ export async function getServerSession() {
         email: data.user.email,
         name: data.user.name,
         image: data.user.image || null,
-        role: data.user.role || 'PATIENT',
+        role: freshRole || 'PATIENT',
       },
       session: data.session || null,
     };

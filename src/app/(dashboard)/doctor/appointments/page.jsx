@@ -8,6 +8,7 @@ import DoctorAppointmentsClient from './DoctorAppointmentsClient';
 const DoctorAppointmentsPage = async () => {
   const session = await getServerSession();
   const user = session?.user || null;
+  console.log('DoctorAppointmentsPage', user);
 
   let initialData = { appointments: [], pagination: null };
   let error = null;

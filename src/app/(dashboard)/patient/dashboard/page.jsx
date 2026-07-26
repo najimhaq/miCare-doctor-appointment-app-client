@@ -8,7 +8,7 @@ export const metadata = { title: 'Patient Dashboard - MiCare' };
 
 export default async function PatientDashboardPage() {
   const session = await getServerSession();
-  // console.log('PatientDashboardPage', session);
+  console.log('Patient er DashboardPage', session);
 
   if (!session?.user) redirect('/signin');
   if (session.user.role !== 'PATIENT') redirect('/');
