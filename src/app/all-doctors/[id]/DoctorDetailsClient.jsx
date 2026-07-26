@@ -52,7 +52,7 @@ const DAY_NAMES = [
 ];
 
 export default function DoctorDetailsClient({ doctor, session, error }) {
-  console.log('DoctorDetailsClient', doctor);
+  // console.log('DoctorDetailsClient', doctor);
   const { isAuthenticated } = useAuth();
   const [isFavorite, setIsFavorite] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
@@ -488,7 +488,7 @@ export default function DoctorDetailsClient({ doctor, session, error }) {
               <div className='flex gap-3 pt-4 border-t border-white/10'>
                 <Button
                   onClick={handleBookAppointment}
-                  loading={isBooking}
+                  isLoading={isBooking}
                   disabled={!selectedDate || !selectedTime || isBooking}
                   className='flex-1'
                 >
